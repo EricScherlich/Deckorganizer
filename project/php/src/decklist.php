@@ -19,6 +19,21 @@ if ( mysqli_connect_errno() ) {
     exit( 'Failed to connect to MySQL: ' . mysqli_connect_error() );
 }
 
+//check if deck is owned by account
+$permission = $con->prepare('SELECT owner from decks where id = ?');
+$permission->bind_param( 'i', $_GET[ 'deck_id' ] );
+$permission->execute();
+$permission->bind_result($owner);
+$permission->fetch();
+$permission->close();
+
+if($owner != $_SESSION['id']){
+    header('Location: deckoverview.php');
+    exit;
+}
+
+
+
 $deck = $con->prepare( 'SELECT `default-cards`.name , `default-cards`.image_uris, cardsXdecks.id FROM cardsXdecks LEFT JOIN `default-cards` ON cardsXdecks.card_id = `default-cards`.id WHERE deck_id = ?' );
 $deck->bind_param( 'i', $_GET[ 'deck_id' ] );
 $deck->execute();
