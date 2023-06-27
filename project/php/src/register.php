@@ -48,7 +48,8 @@ if ($stmt = $con->prepare('INSERT INTO accounts ( username, password, email ) VA
 	$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 	$stmt->bind_param('sss', $_POST['username'], $password, $_POST['email']);
 	$stmt->execute();
-	header('Location: home.php');
+
+	header('Location: index.php');
 } else {
 	// Something is wrong with the SQL statement, so you must check to make sure your accounts table exists with all 3 fields.
 	echo 'Could not prepare statement!';
